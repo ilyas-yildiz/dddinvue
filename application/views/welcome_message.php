@@ -1,124 +1,102 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
-?><!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-	<meta charset="utf-8">
-	<title>Welcome to CodeIgniter</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
-	<style type="text/css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dynamic Dependent Select Box in Vue.js using PHP</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" SameSite="None">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-	::selection { background-color: #E13300; color: white; }
-	::-moz-selection { background-color: #E13300; color: white; }
-
-	body {
-		background-color: #fff;
-		margin: 40px;
-		font: 13px/20px normal Helvetica, Arial, sans-serif;
-		color: #4F5155;
-	}
-
-	a {
-		color: #003399;
-		background-color: transparent;
-		font-weight: normal;
-		text-decoration: none;
-	}
-
-	a:hover {
-		color: #97310e;
-	}
-
-	h1 {
-		color: #444;
-		background-color: transparent;
-		border-bottom: 1px solid #D0D0D0;
-		font-size: 19px;
-		font-weight: normal;
-		margin: 0 0 14px 0;
-		padding: 14px 15px 10px 15px;
-	}
-
-	code {
-		font-family: Consolas, Monaco, Courier New, Courier, monospace;
-		font-size: 12px;
-		background-color: #f9f9f9;
-		border: 1px solid #D0D0D0;
-		color: #002166;
-		display: block;
-		margin: 14px 0 14px 0;
-		padding: 12px 10px 12px 10px;
-	}
-
-	#body {
-		margin: 0 15px 0 15px;
-		min-height: 96px;
-	}
-
-	p {
-		margin: 0 0 10px;
-		padding:0;
-	}
-
-	p.footer {
-		text-align: right;
-		font-size: 11px;
-		border-top: 1px solid #D0D0D0;
-		line-height: 32px;
-		padding: 0 10px 0 10px;
-		margin: 20px 0 0 0;
-	}
-
-	#container {
-		margin: 10px;
-		border: 1px solid #D0D0D0;
-		box-shadow: 0 0 8px #D0D0D0;
-	}
-	</style>
 </head>
 <body>
-
-<div id="container">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-        </tr>
-        </tbody>
-    </table>
-    <div class="row">
-        <div class="col-md-3 pl-5 pb-3">
-            <a href="<?= base_url("success"); ?>" type="button" class="btn btn-outline-success">Success</a>
-            <a href="<?= base_url("error"); ?>" type="button" class="btn btn-outline-danger">Error</a>
-            <a href="<?= base_url("warning"); ?>" type="button" class="btn btn-outline-warning">Warning</a>
+<div class="container" id="dynamicApp">
+    <br />
+    <h3 align="center">Dynamic Dependent Select Box in Vue.js using PHP</h3>
+    <br />
+    <div class="panel panel-default">
+        <div class="panel-heading">Select Data</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label>Select Country</label>
+                <select class="form-control input-lg" v-model="select_country" @change="fetchState">
+                    <option value="">Select Country</option>
+                    <option v-for="data in country_data" :value="data.country_id">{{ data.country_name }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Select State</label>
+                <select class="form-control input-lg" v-model="select_state" @change="fetchCity">
+                    <option value="">Select state</option>
+                    <option v-for="data in state_data" :value="data.state_id">{{ data.state_name }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Select City</label>
+                <select class="form-control input-lg" v-model="select_city">
+                    <option value="">Select City</option>
+                    <option v-for="data in city_data" :value="data.city_id">{{ data.city_name }}</option>
+                </select>
+            </div>
         </div>
     </div>
+    <?php
+    echo "<pre>";
+    print_r($datas);
+    echo "</pre>";
+    ?>
 </div>
-<?php $this->load->view("includes/alert"); ?>
 </body>
 </html>
+
+<script>
+
+    var application = new Vue({
+        el:'#dynamicApp',
+        data:{
+            select_country:'',
+            country_data:'',
+            select_state:'',
+            state_data:'',
+            select_city:'',
+            city_data:''
+        },
+        methods:{
+            fetchCountry:function(){
+                axios.post("http://localhost/dersler/dddinvue/welcome/form_axios", {
+                    request_for:"country"
+                }).then(function(response){
+                    application.country_data = response.data;
+                    application.select_state = '';
+                    application.state_data = '';
+                    application.select_city = '';
+                    application.city_data = '';
+                });
+            },
+            fetchState:function(){
+                axios.post("http://localhost/dersler/dddinvue/welcome/form_axios", {
+                    request_for:'state',
+                    country_id:this.select_country
+                }).then(function(response){
+                    application.state_data = response.data;
+                    application.select_state = '';
+                    application.select_city = '';
+                    application.city_data = '';
+                });
+            },
+            fetchCity:function(){
+                axios.post("http://localhost/dersler/dddinvue/welcome/form_axios", {
+                    request_for:'city',
+                    state_id:this.select_state
+                }).then(function(response){
+                    application.city_data = response.data;
+                    application.select_city = '';
+                });
+            }
+        },
+        created:function(){
+            this.fetchCountry();
+        }
+    });
+
+</script>

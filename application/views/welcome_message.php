@@ -40,11 +40,7 @@
             </div>
         </div>
     </div>
-    <?php
-    echo "<pre>";
-    print_r($datas);
-    echo "</pre>";
-    ?>
+
 </div>
 </body>
 </html>

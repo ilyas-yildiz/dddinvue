@@ -46,7 +46,7 @@ class Welcome extends CI_Controller {
               "city"
           );
       }
-//      print_r($datas);
+
       echo json_encode($datas);
 	}
 
